@@ -331,10 +331,10 @@ with tab5:
     st.header("Random Walk to Gaussian")
     st.markdown(
         r"""
-        A random walk accumulates steps that are individually drawn from a
-        **bimodal** distribution — clearly not Gaussian. Yet as the number of
-        steps grows, the standardised position converges to N(0, 1). This is
-        the CLT in a physical, path-based setting.
+        A random walk takes steps of exactly $+1$ or $-1$ with equal probability.
+        At any single step the distribution is as far from Gaussian as possible:
+        two point masses. Yet as the number of steps grows, the standardised
+        position converges to N(0, 1). This is the CLT in a physical, path-based setting.
         """
     )
     st.latex(
@@ -345,7 +345,8 @@ with tab5:
         r"""
         The left panel shows 500 individual walk paths. The right panel shows
         the histogram of all walk positions at the chosen step, standardised
-        by $\sqrt{n}$, compared to N(0, 1).
+        by $\sqrt{n}$, compared to N(0, 1). At step 1 you see two exact spikes
+        at $\pm 1$; by step $\sim$30 the bell curve has fully emerged.
         """
     )
 
@@ -354,9 +355,7 @@ with tab5:
     rng_rw   = np.random.default_rng(SEED)
     n_walks  = 500
     n_steps  = 150
-    comp     = rng_rw.choice([-1, 1], size=(n_walks, n_steps))
-    raw_steps = comp * 2 + rng_rw.normal(0, 0.5, size=(n_walks, n_steps))
-    raw_steps = (raw_steps - raw_steps.mean()) / raw_steps.std()
+    raw_steps = rng_rw.choice([-1, 1], size=(n_walks, n_steps)).astype(float)
     positions = np.cumsum(raw_steps, axis=1)
 
     fig, axes = make_fig(figsize=(12, 4))
@@ -370,7 +369,7 @@ with tab5:
     axes[0].set_ylim(positions.min() * 1.05, positions.max() * 1.05)
     axes[0].set_xlabel("Step")
     axes[0].set_ylabel("Position")
-    axes[0].set_title(f"500 random walks at step {step} (bimodal steps)")
+    axes[0].set_title(f"500 random walks at step {step} (±1 steps)")
 
     std_pos = positions[:, step - 1] / np.sqrt(step)
     x_rw    = np.linspace(-4, 4, 400)
@@ -390,12 +389,12 @@ with tab5:
     with st.expander("Why does this happen?"):
         st.markdown(
             r"""
-            Each position after $n$ steps is the sum of $n$ independent draws.
-            The individual steps are bimodal — two humps, nothing like a bell curve.
-            Yet the CLT only requires that each step has finite mean and variance,
-            which this distribution has. The shape of the step distribution is
-            irrelevant: any sum of sufficiently many finite-variance terms converges
-            to a Gaussian. The random walk is just the CLT playing out in time.
+            Each position after $n$ steps is the sum of $n$ independent draws of
+            $\pm 1$ — two point masses, as far from Gaussian as a distribution can be.
+            Yet the CLT only requires finite mean and variance, which $\pm 1$ steps have
+            (mean = 0, variance = 1). Shape is irrelevant: any sum of sufficiently many
+            finite-variance terms converges to a Gaussian. The random walk is the CLT
+            playing out in time.
 
             Standardising by $\sqrt{n}$ is essential — it removes the natural spread
             growth so the shape comparison to N(0, 1) is fair.
