@@ -135,9 +135,10 @@ with tab1:
 
     lam = st.slider("Rate parameter λ", 1, 200, 5, key="lam")
 
-    lo  = max(0, int(lam - 5 * np.sqrt(lam)))
-    hi  = int(lam + 5 * np.sqrt(lam)) + 1
-    k   = np.arange(lo, hi)
+    half = int(np.ceil(5 * np.sqrt(lam)))
+    lo   = max(0, lam - half)
+    hi   = lam + half + 1
+    k    = np.arange(lo, hi)
     pmf = stats.poisson.pmf(k, lam)
 
     k_std = (k - lam) / np.sqrt(lam)
