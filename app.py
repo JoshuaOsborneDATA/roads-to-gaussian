@@ -64,13 +64,52 @@ st.set_page_config(
 )
 
 st.title("Roads to the Gaussian")
+
 st.markdown(
-    """
-    The Normal distribution appears across an extraordinary range of seemingly
-    unrelated situations. This dashboard demonstrates four distinct generative
-    processes that all converge to a Gaussian, each with its own mechanism.
+    r"""
+    ### The Central Limit Theorem
+
+    The **Central Limit Theorem (CLT)** is one of the most important results in
+    all of probability theory. In plain terms: if you add together a large number
+    of independent random variables that each have a finite mean and variance, the
+    sum will be approximately Normally distributed — regardless of what the
+    individual variables look like.
+
+    This is not a niche result. The CLT is the reason confidence intervals work,
+    why hypothesis tests are valid, why bootstrap resampling is reliable, and why
+    so much of classical statistics holds up in practice. It shows up in physics,
+    finance, biology, engineering, and data science so routinely that it can start
+    to feel like background noise — something assumed rather than noticed.
+
+    This dashboard is an attempt to make it noticeable again. Each tab demonstrates
+    a different path to the Gaussian: a different generative mechanism, a different
+    starting distribution, a different framing. The last tab shows what happens when
+    the CLT conditions are violated — a distribution that never converges, no matter
+    how many terms you add.
     """
 )
+
+st.markdown("---")
+st.markdown(
+    """
+    **What each tab shows:**
+
+    | Tab | Starting point | Mechanism |
+    |-----|---------------|-----------|
+    | Poisson → Gaussian | Discrete count distribution | Sum of Bernoulli increments; CLT kicks in as rate grows |
+    | Uniform Convolutions → Gaussian | Flat distribution | Repeated convolution smooths any shape toward a bell curve |
+    | Log-normal → Gaussian | Skewed multiplicative process | Logarithm converts products to sums; CLT applies in log-space |
+    | Bootstrap → Gaussian | Arbitrary (trimodal) population | Sample means are averages; CLT guarantees their distribution |
+    | Random Walk → Gaussian | Two point masses (±1) | Cumulative steps are a running sum; shape converges with time |
+    | The Exception: Cauchy | Heavy-tailed distribution | No finite variance — the CLT condition fails, convergence never happens |
+    """
+)
+
+st.markdown("---")
+st.caption(
+    "Made by Joshua Osborne in collaboration with [Claude Code](https://claude.ai/code)."
+)
+st.markdown("")
 
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Poisson → Gaussian",
@@ -483,4 +522,4 @@ with tab6:
             """
         )
 
-st.caption("© Joshua Osborne")
+st.caption("© Joshua Osborne · Made in collaboration with Claude Code")
