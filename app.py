@@ -345,7 +345,8 @@ with tab5:
         r"""
         The left panel shows the sum of $n$ independent Cauchy samples — the heavy
         tails never shrink. The right panel shows the sum of $n$ Normal samples for
-        comparison, where the bell curve tightens exactly as the CLT predicts.
+        comparison, where the shape converges to a Gaussian as the CLT predicts
+        (the spread grows as $\sqrt{n}$, but the shape becomes more bell-like).
         """
     )
 
@@ -380,7 +381,7 @@ with tab5:
                  label=f"Sum of {n_cauchy} Normal(0,1)")
     axes[1].plot(x_n, stats.norm.pdf(x_n, mu_n, sig_n),
                  color=C_FIT, lw=2, label="Normal fit")
-    axes[1].set_title(f"Sum of {n_cauchy} Normal — converges as expected")
+    axes[1].set_title(f"Sum of {n_cauchy} Normal — Gaussian shape as expected")
     axes[1].set_xlabel("Value")
     axes[1].legend()
 
