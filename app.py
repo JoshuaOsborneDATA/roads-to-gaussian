@@ -72,11 +72,12 @@ st.markdown(
     """
 )
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Poisson → Gaussian",
     "Uniform Convolutions → Gaussian",
     "Log-normal → Gaussian",
     "Bootstrap → Gaussian",
+    "Random Walk → Gaussian",
     "The Exception: Cauchy",
 ])
 
@@ -327,6 +328,82 @@ with tab4:
         )
 
 with tab5:
+    st.header("Random Walk to Gaussian")
+    st.markdown(
+        r"""
+        A random walk accumulates steps that are individually drawn from a
+        **bimodal** distribution — clearly not Gaussian. Yet as the number of
+        steps grows, the standardised position converges to N(0, 1). This is
+        the CLT in a physical, path-based setting.
+        """
+    )
+    st.latex(
+        r"\frac{X_1 + X_2 + \cdots + X_n}{\sqrt{n}} \;\longrightarrow\; \mathcal{N}(0, 1)"
+        r"\quad \text{as } n \to \infty"
+    )
+    st.markdown(
+        r"""
+        The left panel shows 500 individual walk paths. The right panel shows
+        the histogram of all walk positions at the chosen step, standardised
+        by $\sqrt{n}$, compared to N(0, 1).
+        """
+    )
+
+    step = st.slider("Step number (n)", 1, 150, 1, key="rwstep")
+
+    rng_rw   = np.random.default_rng(SEED)
+    n_walks  = 500
+    n_steps  = 150
+    comp     = rng_rw.choice([-1, 1], size=(n_walks, n_steps))
+    raw_steps = comp * 2 + rng_rw.normal(0, 0.5, size=(n_walks, n_steps))
+    raw_steps = (raw_steps - raw_steps.mean()) / raw_steps.std()
+    positions = np.cumsum(raw_steps, axis=1)
+
+    fig, axes = make_fig(figsize=(12, 4))
+
+    time_ax = np.arange(1, n_steps + 1)
+    for i in range(n_walks):
+        axes[0].plot(time_ax[:step], positions[i, :step],
+                     color="steelblue", alpha=0.05, lw=0.6)
+    axes[0].axvline(step, color="white" if False else "#555", lw=1, alpha=0.6)
+    axes[0].set_xlim(0, n_steps)
+    axes[0].set_ylim(positions.min() * 1.05, positions.max() * 1.05)
+    axes[0].set_xlabel("Step")
+    axes[0].set_ylabel("Position")
+    axes[0].set_title(f"500 random walks at step {step} (bimodal steps)")
+
+    std_pos = positions[:, step - 1] / np.sqrt(step)
+    x_rw    = np.linspace(-4, 4, 400)
+    axes[1].hist(std_pos, bins=35, density=True,
+                 color=C_HIST, alpha=0.7, label="Walk positions / √n")
+    axes[1].plot(x_rw, stats.norm.pdf(x_rw), color=C_FIT, lw=2,
+                 linestyle="--", label="N(0, 1)")
+    axes[1].set_xlim(-4, 4)
+    axes[1].set_xlabel("Position / √step")
+    axes[1].set_title(f"Standardised positions at step {step}")
+    axes[1].legend()
+
+    plt.tight_layout()
+    st.pyplot(fig)
+    plt.close(fig)
+
+    with st.expander("Why does this happen?"):
+        st.markdown(
+            r"""
+            Each position after $n$ steps is the sum of $n$ independent draws.
+            The individual steps are bimodal — two humps, nothing like a bell curve.
+            Yet the CLT only requires that each step has finite mean and variance,
+            which this distribution has. The shape of the step distribution is
+            irrelevant: any sum of sufficiently many finite-variance terms converges
+            to a Gaussian. The random walk is just the CLT playing out in time.
+
+            Standardising by $\sqrt{n}$ is essential — it removes the natural spread
+            growth so the shape comparison to N(0, 1) is fair.
+            """
+        )
+
+
+with tab6:
     st.header("The Exception: Cauchy Distribution")
     st.markdown(
         r"""
