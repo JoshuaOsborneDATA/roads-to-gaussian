@@ -84,9 +84,11 @@ with tab1:
         r"""
         The Poisson($\lambda$) distribution counts rare events in a fixed interval.
         As $\lambda$ grows, its shape approaches a Normal with the same mean and variance:
-        $$\text{Poisson}(\lambda) \;\longrightarrow\; \mathcal{N}(\lambda,\;\lambda)
-        \quad\text{as } \lambda \to \infty$$
         """
+    )
+    st.latex(
+        r"\text{Poisson}(\lambda) \;\longrightarrow\; \mathcal{N}(\lambda,\;\lambda)"
+        r"\quad\text{as } \lambda \to \infty"
     )
 
     lam = st.slider("Rate parameter λ", 1, 200, 5, key="lam")
@@ -140,10 +142,12 @@ with tab2:
         Adding $n$ independent Uniform(0, 1) random variables produces a distribution
         that evolves through convolution. After just a handful of additions the result
         is visually indistinguishable from a Gaussian:
-        $$X_1 + X_2 + \cdots + X_n \;\longrightarrow\;
-        \mathcal{N}\!\left(\tfrac{n}{2},\;\tfrac{n}{12}\right)
-        \quad\text{as } n \to \infty$$
         """
+    )
+    st.latex(
+        r"X_1 + X_2 + \cdots + X_n \;\longrightarrow\;"
+        r"\mathcal{N}\!\left(\tfrac{n}{2},\;\tfrac{n}{12}\right)"
+        r"\quad\text{as } n \to \infty"
     )
 
     n_conv = st.slider("Number of Uniform(0,1) variables added", 1, 20, 1, key="nconv")
@@ -197,7 +201,11 @@ with tab3:
         r"""
         A log-normal distribution arises from a **multiplicative** process. If
         $X = Y_1 \cdot Y_2 \cdots Y_n$ where each $Y_i > 0$ is an independent factor, then
-        $$\log X = \log Y_1 + \log Y_2 + \cdots + \log Y_n$$
+        """
+    )
+    st.latex(r"\log X = \log Y_1 + \log Y_2 + \cdots + \log Y_n")
+    st.markdown(
+        r"""
         is a sum of independent terms. By the CLT this sum converges to a Gaussian,
         so $\log X \sim \mathcal{N}(\mu, \sigma^2)$ — making $X$ log-normal.
         The left panel shows the skewed raw distribution; the right panel shows that
