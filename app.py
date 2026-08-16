@@ -333,20 +333,17 @@ with tab5:
         r"""
         A random walk takes steps of exactly $+1$ or $-1$ with equal probability.
         At any single step the distribution is as far from Gaussian as possible:
-        two point masses. Yet as the number of steps grows, the standardised
-        position converges to N(0, 1). This is the CLT in a physical, path-based setting.
+        two point masses. Yet as the number of steps grows, the position becomes
+        approximately Normal with mean 0 and variance $n$:
         """
     )
-    st.latex(
-        r"\frac{X_1 + X_2 + \cdots + X_n}{\sqrt{n}} \;\longrightarrow\; \mathcal{N}(0, 1)"
-        r"\quad \text{as } n \to \infty"
-    )
+    st.latex(r"X_1 + X_2 + \cdots + X_n \;\sim\; \mathcal{N}(0,\; n) \quad \text{as } n \to \infty")
     st.markdown(
         r"""
         The left panel shows 500 individual walk paths. The right panel shows
         the histogram of all walk positions at the chosen step with a fitted
         Normal overlay. At step 1 you see two exact spikes at $\pm 1$; as steps
-        accumulate the spread grows as $\sqrt{n}$ and the bell shape emerges.
+        accumulate the spread grows and the bell shape emerges.
         """
     )
 
