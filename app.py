@@ -96,7 +96,7 @@ st.markdown(
 
     | Tab | Starting point | Mechanism |
     |-----|---------------|-----------|
-    | Poisson → Gaussian | Discrete count distribution | Sum of Bernoulli increments; CLT kicks in as rate grows |
+    | Poisson → Gaussian | Discrete count distribution | Poisson additivity: sum of λ independent Poisson(1) terms; CLT applies as λ grows |
     | Uniform Convolutions → Gaussian | Flat distribution | Repeated convolution smooths any shape toward a bell curve |
     | Log-normal → Gaussian | Skewed multiplicative process | Logarithm converts products to sums; CLT applies in log-space |
     | Bootstrap → Gaussian | Arbitrary (trimodal) population | Sample means are averages; CLT guarantees their distribution |
