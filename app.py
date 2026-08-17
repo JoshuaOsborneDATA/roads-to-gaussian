@@ -145,6 +145,15 @@ with tab1:
     x_std = np.linspace(-4, 4, 400)
     x_raw = np.linspace(k.min(), k.max(), 400)
 
+    # Symmetric bins: extent = max(|left tail|, |right tail|) so both sides
+    # start at the same distance from zero. Poisson PMF is 0 for k < 0.
+    bin_width = 1.0 / np.sqrt(lam)
+    extent    = max(abs(k_std.min()), abs(k_std.max()))
+    n_half    = int(np.round(extent / bin_width))
+    k_sym     = lam + np.arange(-n_half, n_half + 1)
+    pmf_sym   = stats.poisson.pmf(k_sym, lam)
+    k_std_sym = (k_sym - lam) / np.sqrt(lam)
+
     fig, axes = make_fig()
 
     axes[0].bar(k, pmf, width=1.0, color=C_HIST, alpha=0.7, label=f"Poisson({lam})")
@@ -155,7 +164,7 @@ with tab1:
     axes[0].set_title(f"Poisson(λ={lam})")
     axes[0].legend()
 
-    axes[1].bar(k_std, pmf * np.sqrt(lam), width=1.0 / np.sqrt(lam),
+    axes[1].bar(k_std_sym, pmf_sym * np.sqrt(lam), width=bin_width,
                 color=C_HIST, alpha=0.7, label="Standardised Poisson")
     axes[1].plot(x_std, stats.norm.pdf(x_std), color=C_FIT, lw=2, label="N(0,1)")
     axes[1].set_xlim(-4, 4)
