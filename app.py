@@ -170,11 +170,16 @@ with tab1:
     with st.expander("Why does this happen?"):
         st.markdown(
             r"""
-            Poisson($\lambda$) can be thought of as the sum of $\lambda$ independent
-            Bernoulli increments. By the Central Limit Theorem, the sum of many
-            independent identically distributed variables converges to a Gaussian
-            regardless of the original distribution. As $\lambda$ grows, more terms
-            enter the sum and the bell-curve shape emerges.
+            By the **additivity property** of the Poisson distribution,
+            $\text{Poisson}(\lambda)$ is equal in distribution to the sum of $\lambda$
+            independent $\text{Poisson}(1)$ random variables — each with mean 1 and
+            variance 1. Applying the Central Limit Theorem directly:
+
+            $$\frac{\text{Poisson}(\lambda) - \lambda}{\sqrt{\lambda}}
+            \;\longrightarrow\; \mathcal{N}(0,1) \quad \text{as } \lambda \to \infty$$
+
+            This is CLT in its standard form: a sum of $\lambda$ iid finite-variance
+            terms converges to a Gaussian as the number of terms grows.
             """
         )
 
